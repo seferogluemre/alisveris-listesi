@@ -8,6 +8,7 @@ import {
   Button,
   FormControl,
   FormSelect,
+  FormCheck,
 } from "react-bootstrap";
 import { nanoid } from "nanoid/non-secure";
 import { SiTicktick } from "react-icons/si";
@@ -55,6 +56,10 @@ function App() {
   const [shopName, setShopName] = useState<string>();
   const [categoriesName, setCategoriesName] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [filterProductName, setfilterProductName] = useState<string>("");
+  const [filterStatus, setFilterStatus] = useState<string>("");
+  const [filterIsBought, setFilterIsBought] = useState<string>("");
+  const [filterNotBought, setFilterNotBought] = useState<string>("");
 
   const handleAddToShop = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -87,8 +92,8 @@ function App() {
     const shopData: Product = {
       id: nanoid(7),
       name: formatedProductName,
-      shop: selectedShop,
-      category: selectedCategory,
+      shop: selectedShop as Product["shop"],
+      category: selectedCategory as Product["category"],
       isBought: false,
     };
 
@@ -104,6 +109,19 @@ function App() {
   const handleRemoveProduct = (id: string) => {
     setProducts(products.filter((product) => product.id !== id));
   };
+
+  const filteredProducts = products.filter((product) => {
+    const nameMatch = product.name
+      .toLowerCase()
+      .includes(filterProductName.toLowerCase());
+
+    if (filterIsBought === "bought") {
+      return nameMatch && product.isBought;
+    } else if (filterNotBought === "not-bought") {
+      return nameMatch && !product.isBought;
+    }
+    return nameMatch;
+  });
 
   // Dışarıdan string türünde bir ürün idsi alır ve bütün ürünlerin id si ile kontrol ederek eşleşen ürünün isBought degerini tam tersine çevirir
   const handleIsBought = (id: string) => {
@@ -166,13 +184,44 @@ function App() {
             </Button>
           </Form>
         </Row>
+        <Row className="px-5">
+          <Form className="d-flex column-gap-3 mt-3">
+            <FormControl
+              type="text"
+              className="fs-5"
+              value={filterProductName}
+              onChange={(e) => setfilterProductName(e.target.value)}
+              placeholder="Ürün Adını Giriniz..."
+            />
+            <Form.Check
+              type="radio"
+              name="All"
+              label="All"
+              value="All"
+              onChange={(e) => setFilterStatus(e.target.value)}
+            />
+            <Form.Check
+              type="radio"
+              name="bought"
+              value="bought"
+              label="Alınanlar"
+              onChange={(e) => setFilterIsBought(e.target.value)}
+            />
+            <Form.Check
+              type="radio"
+              name="not-bought"
+              value="not-bought"
+              label="Alınmayanlar"
+              onChange={(e) => setFilterNotBought(e.target.value)}
+            />
+          </Form>
+        </Row>
       </Container>
       {error && (
         <Container className="alert-container">
           <Alert className="alert">{error}</Alert>
         </Container>
       )}
-
       <Container className="my-5">
         <Row>
           <table>
@@ -188,7 +237,7 @@ function App() {
             </thead>
           </table>
           <tbody id="table-body">
-            {products.map((item) => (
+            {filteredProducts.map((item) => (
               <tr
                 key={item.id}
                 style={{
