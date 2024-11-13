@@ -16,9 +16,9 @@ import { MdDelete } from "react-icons/md";
 interface Product {
   id: string;
   name: string;
-  shop: string;
-  category: string;
-  isBought: boolean;
+  shop: (typeof shops)[number];
+  category: (typeof categories)[number];
+  isBought?: boolean;
 }
 
 interface ShopAndCategoriesType {
@@ -26,8 +26,8 @@ interface ShopAndCategoriesType {
   name: string;
 }
 
-const shops: string[] = ["Migros", "Teknosa", "Bim", "Şok", "CarrefourSa"];
-const categories: string[] = [
+const shops = ["Migros", "Teknosa", "Bim", "Şok", "CarrefourSa"] as const;
+const categories = [
   "Elektronik",
   "Giyim",
   "Bakliyat",
@@ -35,7 +35,8 @@ const categories: string[] = [
   "Oyuncak",
   "Unlu Mamüller",
   "Tatlı",
-];
+] as const;
+
 const shopsObj: ShopAndCategoriesType[] = shops.map((shop, index) => ({
   id: index,
   name: shop,
@@ -98,6 +99,10 @@ function App() {
     setCategoriesName("");
     setShopName("");
     setError("");
+  };
+
+  const handleRemoveProduct = (id: string) => {
+    setProducts(products.filter((product) => product.id !== id));
   };
 
   // Dışarıdan string türünde bir ürün idsi alır ve bütün ürünlerin id si ile kontrol ederek eşleşen ürünün isBought degerini tam tersine çevirir
@@ -215,7 +220,10 @@ function App() {
                 </td>
                 <td className="card-title">
                   <span className="card-span">
-                    <MdDelete className="fs-4" />
+                    <MdDelete
+                      onClick={() => handleRemoveProduct(item.id)}
+                      className="fs-4"
+                    />
                   </span>
                 </td>
               </tr>
