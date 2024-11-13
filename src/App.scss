@@ -3,8 +3,9 @@
 body {
   background-color: #574e86;
   font-family: "Roboto", serif;
-  font-size: 20px !important;
+  font-size: 23px !important;
   color: aliceblue !important;
+  font-weight: bold;
 }
 
 .shop-container {
@@ -83,6 +84,18 @@ table td {
   }
 }
 
+tbody td {
+  padding: 0.625em;
+  text-align: center;
+  overflow: hidden;
+  background-color: #ffab72;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  &:hover {
+    border-bottom: 1px solid black;
+  }
+}
+
 table th {
   font-size: 0.85em;
   letter-spacing: 0.1em;
@@ -91,7 +104,9 @@ table th {
 
 tbody {
   display: block;
-
+  padding: 0 !important;
+  border-radius: 15px;
+  margin: 5px 0 !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
   max-height: calc(60vh - 100px);

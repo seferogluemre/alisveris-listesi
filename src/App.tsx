@@ -100,6 +100,18 @@ function App() {
     setError("");
   };
 
+  // Dışarıdan string türünde bir ürün idsi alır ve bütün ürünlerin id si ile kontrol ederek eşleşen ürünün isBought degerini tam tersine çevirir
+  const handleIsBought = (id: string) => {
+    const prevProducts = products.map((product) => {
+      if (product.id == id) {
+        return { ...product, isBought: !product.isBought };
+      }
+      return product;
+    });
+    // State'i  güncelledik
+    setProducts(prevProducts);
+  };
+
   return (
     <>
       <div className="container-fluid">
@@ -195,7 +207,10 @@ function App() {
                 </td>
                 <td className="card-title">
                   <span className="card-span">
-                    <SiTicktick className="fs-4" />
+                    <SiTicktick
+                      className="fs-4"
+                      onClick={() => handleIsBought(item.id)}
+                    />
                   </span>
                 </td>
                 <td className="card-title">
