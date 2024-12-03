@@ -1,4 +1,4 @@
-Shopping List Application
+Shopping List App
 This application is built with React and TypeScript. It allows users to:
 
 Add items to the shopping list after passing validation checks.
